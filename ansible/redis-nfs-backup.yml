@@ -1,0 +1,12 @@
+- hosts: lp-redis
+  become: yes
+  gather_facts: false
+  vars_files:
+    - ['{{inventory_dir}}/secrets.yml']
+  vars:
+    - redis_nfs_backup_path: "{{ nfs_db_backup_path }}"
+    - redis_dump_host: "{{app_redis_dump_host}}"
+    - dump_base_path: "{{app_dump_base_path}}"
+  roles:
+   - role: redisnfsbackup
+     tags: redis-nfs-backup

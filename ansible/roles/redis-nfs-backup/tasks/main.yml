@@ -1,0 +1,29 @@
+- name: Create the directory
+  file: path={{ dump_base_path }} state=directory recurse=yes
+
+#- set_fact:
+   # redis_backup_file_name: "redis-backup-{{ lookup('pipe', 'date +%Y-%m-%d-%T') }}.rdb"
+ 
+#- set_fact:
+    # redis_backup_file_path: "{{ redis_backup_dir }}/{{ redis_backup_file_name }}"
+
+- name: Take Redis dump backup
+  copy:
+    src: /date/dump.rdb
+    shell: zip -r /db_backup/redis-backup/dump.rdb_$(date +%F).zip /data/dump.rdb
+   # dest: "{{ app_dump_base_path }}/{{ redis-backup }}"
+    remote_src: yes
+
+- name: Send notification to Teams
+  uri:
+        url: https://outlook.office.com/webhookb2/081e4db9-7004-4b17-8b85-575b9fa2f2c2@d2f80462-bf28-4055-8ef3-085d8e4b2ed0/IncomingWebhook/932ce4f46f90481d9289ee6a08ebba5b/38c47329-d7c8-45b5-8fa4-e4d012d4f8ec
+        method: POST
+        body_format: json
+        body:
+          "@type": "MessageCard"
+          "@context": "http://schema.org/extensions"
+          "themeColor": "0072C6"
+          "title": "Redis Backup"
+          "text": "Redis dump backup completed"
+  delegate_to: localhost
+

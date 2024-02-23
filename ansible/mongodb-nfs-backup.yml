@@ -1,0 +1,11 @@
+- hosts: "{{ mongo_master }}"
+  become: true
+  vars_files:
+    - ['{{inventory_dir}}/secrets.yml']
+  vars:
+    - mongo_nfs_backup_path: "{{ nfs_db_backup_path }}"
+    - mongo_dump_host: "{{app_mongo_dump_host}}"
+    - dump_base_path: "{{app_dump_base_path}}"
+  roles:
+   - role: mongodb-backup
+     tags: mongodb-nfs-backup

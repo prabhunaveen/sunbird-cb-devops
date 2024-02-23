@@ -1,0 +1,7 @@
+dump_name: 
+dump_create_request_body: {
+    type: fs,
+    settings: {
+      location: "{{ dump_base_path }}"
+    }
+}

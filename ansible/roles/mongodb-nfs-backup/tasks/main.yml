@@ -3,14 +3,14 @@
 
 #- set_fact:
    # redis_backup_file_name: "redis-backup-{{ lookup('pipe', 'date +%Y-%m-%d-%T') }}.rdb"
- 
+
 #- set_fact:
     # redis_backup_file_path: "{{ redis_backup_dir }}/{{ redis_backup_file_name }}"
 
-- name: Take Redis dump backup
-  copy:
-    src: /date/dump.rdb
-    shell: zip -r /db_backup/redis-backup/dump.rdb_$(date +%F).zip /data/dump.rdb
+- name: Take mongodb dump backup
+  cmd:
+    #src: /date/dump.rdb ## For redis backup
+    shell: mongodump --out /db_backup/mongodb-backup/mongodbdump_$(date +%F)
    # dest: "{{ app_dump_base_path }}/{{ redis-backup }}"
     remote_src: yes
 
@@ -23,7 +23,6 @@
           "@type": "MessageCard"
           "@context": "http://schema.org/extensions"
           "themeColor": "0072C6"
-          "title": "Redis Backup"
-          "text": "Redis dump backup completed"
+          "title": "Mongodb Backup"
+          "text": "Mongodb dump backup completed"
   delegate_to: localhost
-  
